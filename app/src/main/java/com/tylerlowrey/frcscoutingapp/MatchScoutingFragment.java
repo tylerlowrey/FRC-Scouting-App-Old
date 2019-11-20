@@ -7,18 +7,18 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class PitScoutingFragment extends Fragment
+public class MatchScoutingFragment extends Fragment
 {
 
 
-    public PitScoutingFragment()
+    public MatchScoutingFragment()
     {
         // Required empty public constructor
     }
 
-    public static PitScoutingFragment newInstance()
+    public static MatchScoutingFragment newInstance()
     {
-        PitScoutingFragment fragment = new PitScoutingFragment();
+        MatchScoutingFragment fragment = new  MatchScoutingFragment();
         return fragment;
     }
 
@@ -27,7 +27,7 @@ public class PitScoutingFragment extends Fragment
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pit_scouting, container, false);
+        return inflater.inflate(R.layout.fragment_match_scouting, container, false);
     }
 
 
