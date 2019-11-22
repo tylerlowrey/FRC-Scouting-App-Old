@@ -47,6 +47,16 @@
                 android:inputType="number"
                 />
 
+            <Button
+                android:id="@+id/take_picture_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                android:text="Take Picture"
+                />
+
         </LinearLayout>
 
 
@@ -54,7 +64,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/login_submit_button"
+        android:id="@+id/pit_scouting_submit_button"
         android:text="Submit"
         android:textSize="24sp"
         android:layout_width="match_parent"

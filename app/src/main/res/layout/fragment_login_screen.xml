@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="100dp"
+        android:paddingTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,8 +20,9 @@
         <ImageView
             android:id="@+id/login_team_logo"
             android:src="@drawable/frc_283_logo"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
             />
 
         <TextView
@@ -50,6 +51,17 @@
         <Button
             android:id="@+id/login_submit_button"
             android:text="Submit"
+            android:textSize="20sp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <Button
+            android:id="@+id/debug_button_list_files"
+            android:text="List Files Debug Test"
             android:textSize="20sp"
             android:paddingVertical="15dp"
             android:paddingHorizontal="50dp"

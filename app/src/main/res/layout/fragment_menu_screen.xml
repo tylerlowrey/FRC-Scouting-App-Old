@@ -17,6 +17,13 @@
         app:layout_constraintTop_toTopOf="parent"
         >
 
+        <TextView
+            android:id="@+id/test_shared_pref_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            />
+
         <Button
             android:id="@+id/menu_match_scouting_button"
             android:text="Match Scouting"

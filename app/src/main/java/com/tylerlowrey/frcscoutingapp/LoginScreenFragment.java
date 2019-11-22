@@ -1,6 +1,9 @@
 package com.tylerlowrey.frcscoutingapp;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.Scope;
 
 public class LoginScreenFragment extends Fragment
 {
+
+    public static final String TAG = "LOGIN_SCREEN_FRAGMENT";
 
     public LoginScreenFragment()
     {
@@ -42,16 +55,39 @@ public class LoginScreenFragment extends Fragment
     {
         Button nextFragBtn = getView().findViewById(R.id.login_submit_button);
         nextFragBtn.setOnClickListener(handleClick);
+        Button debugBtn = getView().findViewById(R.id.debug_button_list_files);
+        debugBtn.setOnClickListener(handleDebugClick);
     }
 
-    private View.OnClickListener handleClick = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
+    private View.OnClickListener handleClick = (View view) -> {
+            String newUsername = getString(R.string.default_username);
+
+            //Grab name from edit text
+            EditText username = getView().findViewById(R.id.login_name_input);
+
+            if (!username.getText().toString().equals(""))
+            {
+                newUsername = username.getText().toString();
+                newUsername.replace(' ', '_');
+            }
+
             NavigationManager navManager = NavigationManager.getInstance();
+            SharedPreferences sharedPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putString(getString(R.string.shared_prefs_current_user), newUsername);
+            editor.apply();
             navManager.navigateToFragment(MenuFragment.newInstance());
-        }
+    };
+
+    private View.OnClickListener handleDebugClick = (View view) -> {
+        Scope SCOPE_ACCESS_FILES = new Scope(Scopes.DRIVE_APPFOLDER);
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                                .requestScopes(SCOPE_ACCESS_FILES)
+                                                .requestEmail()
+                                                .build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getContext(), signInOptions);
+        startActivityForResult(googleSignInClient.getSignInIntent(), MainActivity.REQUEST_CODE_SIGN_IN);
     };
 
 }

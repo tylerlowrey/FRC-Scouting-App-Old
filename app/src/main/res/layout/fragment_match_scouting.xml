@@ -17,13 +17,10 @@
         app:layout_constraintTop_toTopOf="parent"
         >
 
-
-
-
     </LinearLayout>
 
     <Button
-        android:id="@+id/login_submit_button"
+        android:id="@+id/match_scouting_submit_button"
         android:text="Submit"
         android:textSize="24sp"
         android:layout_width="match_parent"
@@ -35,4 +32,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
