@@ -2,4 +2,6 @@
     <string name="app_name">FRC Scouting App</string>
     <string name="shared_prefs_current_user">CURRENT_USER</string>
     <string name="default_username">Default_User</string>
+    <string name="action_upload_files">Upload Files</string>
+    <string name="action_change_user">Change User</string>
 </resources>

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -57,10 +59,37 @@ public class MainActivity extends AppCompatActivity
                 break;
             default:
                 Log.d(MainActivity.TAG, "onActivityResult: default case reached " + requestCode + ", " + resultCode);
-                Log.d(MainActivity.TAG, "Result data: " + resultData.getExtras().toString());
+                Bundle bundle = resultData.getExtras();
+                for(String key: bundle.keySet())
+                {
+                    Log.d(TAG, key + " = " + bundle.get(key));
+                }
+
         }
 
         super.onActivityResult(requestCode, resultCode, resultData);
+    }
+
+    //Adapted from Zybooks 4.1.2
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.optionsmenu, menu);
+        return true;
+
+    }
+
+
+    //Adapted from Zybooks Figure 4.1.3
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_upload_files:
+                makeToast(getApplicationContext(), "Files uploaded", Toast.LENGTH_LONG);
+                return true;
+            case R.id.action_change_user:
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void handleSignInResult(Intent result)

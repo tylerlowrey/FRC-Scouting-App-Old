@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -46,6 +47,7 @@ public class LoginScreenFragment extends Fragment
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_login_screen, container, false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         return view;
 
     }
@@ -80,13 +82,13 @@ public class LoginScreenFragment extends Fragment
     };
 
     private View.OnClickListener handleDebugClick = (View view) -> {
-        Scope SCOPE_ACCESS_FILES = new Scope(Scopes.DRIVE_APPFOLDER);
+        Scope SCOPE_ACCESS_FILES = new Scope(Scopes.DRIVE_FILE);
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                                                 .requestScopes(SCOPE_ACCESS_FILES)
                                                 .requestEmail()
                                                 .build();
 
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getContext(), signInOptions);
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getActivity().getApplicationContext(), signInOptions);
         startActivityForResult(googleSignInClient.getSignInIntent(), MainActivity.REQUEST_CODE_SIGN_IN);
     };
 
