@@ -12,11 +12,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 
+import java.io.File;
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity
 {
 
     public static final String TAG = "MAIN_ACTIVITY";
     public static final int REQUEST_CODE_SIGN_IN = 1;
+    public static final int REQUEST_CODE_UPLOAD_FILES = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,7 +58,34 @@ public class MainActivity extends AppCompatActivity
             case REQUEST_CODE_SIGN_IN:
                 if(resultCode == MainActivity.RESULT_OK && resultData != null)
                 {
+                    Log.d(MainActivity.TAG, "onActivityResult: REQUEST_CODE_SIGN_IN [" + requestCode + "], Result Code:" + resultCode);
+                    Bundle bundle = resultData.getExtras();
+                    for(String key: bundle.keySet())
+                    {
+                        Log.d(TAG, key + " = " + bundle.get(key));
+                    }
                     handleSignInResult(resultData);
+                }
+            case REQUEST_CODE_UPLOAD_FILES:
+                Log.d(MainActivity.TAG, "onActivityResult: REQUEST_CODE_SIGN_IN [" + requestCode + "], Result Code:" + resultCode);
+                if(FileUploader.getInstance().hasFilePermissions(this))
+                {
+                    try
+                    {
+                        FileUploader.getInstance().uploadAllSavedFiles();
+                        Log.d(TAG, "Files uploaded");
+                        makeToast(getApplicationContext(), "Files uploaded.", Toast.LENGTH_LONG);
+                    }
+                    catch (IOException e)
+                    {
+                        Log.d(TAG, "Unable to upload files");
+                        makeToast(getApplicationContext(), "Unable to upload files", Toast.LENGTH_LONG);
+                    }
+
+                }
+                else
+                {
+                    Log.d(TAG, "Did not have permissions");
                 }
                 break;
             default:
@@ -78,15 +109,20 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     //Adapted from Zybooks Figure 4.1.3
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId()) {
             case R.id.action_upload_files:
                 makeToast(getApplicationContext(), "Files uploaded", Toast.LENGTH_LONG);
                 return true;
             case R.id.action_change_user:
+                NavigationManager.getInstance().navigateToFragment(LoginScreenFragment.newInstance());
+                return true;
+            case R.id.action_go_to_settings:
+                NavigationManager.getInstance().navigateToFragment(PitScoutingFragment.newInstance());
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

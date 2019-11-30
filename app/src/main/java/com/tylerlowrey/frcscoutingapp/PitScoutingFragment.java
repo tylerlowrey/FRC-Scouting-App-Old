@@ -1,10 +1,13 @@
 package com.tylerlowrey.frcscoutingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +17,8 @@ import androidx.fragment.app.Fragment;
 public class PitScoutingFragment extends Fragment
 {
 
+    public static final String TAG = "PITSCOUTINGFRAGMENT";
+    private LinearLayout formContainer;
 
     public PitScoutingFragment()
     {
@@ -38,8 +43,11 @@ public class PitScoutingFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
-        Button matchScoutingBtn = getView().findViewById(R.id.take_picture_button);
-        matchScoutingBtn.setOnClickListener(onTakePictureClick);
+        formContainer = view.findViewById(R.id.pit_form_container);
+        Button takePictureBtn = view.findViewById(R.id.take_picture_button);
+        takePictureBtn.setOnClickListener(onTakePictureClick);
+        Button submitFormBtn = view.findViewById(R.id.pit_scouting_submit_button);
+        submitFormBtn.setOnClickListener(onSubmitForm);
 
     }
 
@@ -51,6 +59,18 @@ public class PitScoutingFragment extends Fragment
             //Attempt to open camera (if user has given permission)
 
             //Save picture to a folder on accessible phone storage
+        }
+    };
+
+    private View.OnClickListener onSubmitForm = (View view) -> {
+        for(int i = 0; i < formContainer.getChildCount(); ++i)
+        {
+            View childView = formContainer.getChildAt(i);
+            if(childView instanceof TextView)
+            {
+                TextView txtView = (TextView) childView;
+                txtView.getText();
+            }
         }
     };
 

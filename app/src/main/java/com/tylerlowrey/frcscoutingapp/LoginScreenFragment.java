@@ -89,7 +89,7 @@ public class LoginScreenFragment extends Fragment
                                                 .build();
 
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getActivity().getApplicationContext(), signInOptions);
-        startActivityForResult(googleSignInClient.getSignInIntent(), MainActivity.REQUEST_CODE_SIGN_IN);
+        getActivity().startActivityForResult(googleSignInClient.getSignInIntent(), MainActivity.REQUEST_CODE_SIGN_IN);
     };
 
 }
