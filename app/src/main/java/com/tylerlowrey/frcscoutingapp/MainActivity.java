@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 
-import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
@@ -21,6 +20,7 @@ public class MainActivity extends AppCompatActivity
     public static final String TAG = "MAIN_ACTIVITY";
     public static final int REQUEST_CODE_SIGN_IN = 1;
     public static final int REQUEST_CODE_UPLOAD_FILES = 2;
+    public static final String DEFAULT_USERNAME = "Default_User";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,15 +72,20 @@ public class MainActivity extends AppCompatActivity
                 {
                     try
                     {
-                        FileUploader.getInstance().uploadAllSavedFiles();
+                        //Upload files
+                        FileUploader.getInstance().uploadFiles("local");
                         Log.d(TAG, "Files uploaded");
                         makeToast(getApplicationContext(), "Files uploaded.", Toast.LENGTH_LONG);
+
+                        //
                     }
                     catch (IOException e)
                     {
                         Log.d(TAG, "Unable to upload files");
                         makeToast(getApplicationContext(), "Unable to upload files", Toast.LENGTH_LONG);
                     }
+
+
 
                 }
                 else
@@ -106,7 +111,6 @@ public class MainActivity extends AppCompatActivity
     {
         getMenuInflater().inflate(R.menu.optionsmenu, menu);
         return true;
-
     }
 
     //Adapted from Zybooks Figure 4.1.3
@@ -114,14 +118,17 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId()) {
+            case R.id.action_main_menu:
+                NavigationManager.getInstance().navigateToFragment(MenuFragment.newInstance());
+                return true;
             case R.id.action_upload_files:
-                makeToast(getApplicationContext(), "Files uploaded", Toast.LENGTH_LONG);
+                //TODO: Figure out what to put here
                 return true;
             case R.id.action_change_user:
                 NavigationManager.getInstance().navigateToFragment(LoginScreenFragment.newInstance());
                 return true;
             case R.id.action_go_to_settings:
-                NavigationManager.getInstance().navigateToFragment(PitScoutingFragment.newInstance());
+                NavigationManager.getInstance().navigateToFragment(AppSettingsFragment.newInstance());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

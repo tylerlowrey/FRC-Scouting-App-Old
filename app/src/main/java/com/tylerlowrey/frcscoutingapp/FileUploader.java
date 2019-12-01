@@ -56,7 +56,7 @@ public class FileUploader
     }
 
     //TODO: Indicated this was adapted from Zybooks 6.2.5
-    public boolean uploadAllSavedFiles() throws IOException
+    public boolean uploadFiles(String path) throws IOException
     {
         /*
         File fileStorageRootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
@@ -151,7 +151,7 @@ public class FileUploader
 
     }
 
-    public void saveFileLocally(File file)
+    public void saveFileLocally(String filename)
     {
         try
         {

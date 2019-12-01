@@ -57,8 +57,11 @@ public class LoginScreenFragment extends Fragment
     {
         Button nextFragBtn = getView().findViewById(R.id.login_submit_button);
         nextFragBtn.setOnClickListener(handleClick);
+        /* TODO: Remove this
         Button debugBtn = getView().findViewById(R.id.debug_button_list_files);
         debugBtn.setOnClickListener(handleDebugClick);
+
+         */
     }
 
     private View.OnClickListener handleClick = (View view) -> {

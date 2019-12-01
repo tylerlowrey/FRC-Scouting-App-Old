@@ -1,6 +1,9 @@
 package com.tylerlowrey.frcscoutingapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.FileObserver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +15,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 public class PitScoutingFragment extends Fragment
 {
 
     public static final String TAG = "PITSCOUTINGFRAGMENT";
-    private LinearLayout formContainer;
+    private ConstraintLayout formContainer;
 
     public PitScoutingFragment()
     {
@@ -63,6 +67,7 @@ public class PitScoutingFragment extends Fragment
     };
 
     private View.OnClickListener onSubmitForm = (View view) -> {
+        /*
         for(int i = 0; i < formContainer.getChildCount(); ++i)
         {
             View childView = formContainer.getChildAt(i);
@@ -72,6 +77,15 @@ public class PitScoutingFragment extends Fragment
                 txtView.getText();
             }
         }
+         */
+
+        FileUploader fileUploader = FileUploader.getInstance();
+
+        SharedPreferences sharedPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        String username = sharedPrefs.getString(getString(R.string.shared_prefs_current_user),
+                                                MainActivity.DEFAULT_USERNAME);
+
+        fileUploader.saveFileLocally(username + "_test.csv");
     };
 
 

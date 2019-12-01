@@ -52,30 +52,21 @@ public class MenuFragment extends Fragment
         pitScoutingBtn.setOnClickListener(onPitScoutingClick);
 
         //TODO: Remove this
+        /*
         TextView testText = getView().findViewById(R.id.test_shared_pref_username);
         SharedPreferences sharedPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-        testText.setText(sharedPrefs.getString(getString(R.string.shared_prefs_current_user), "Didn't Work"));
-
+        testText.setText(sharedPrefs.getString(getString(R.string.shared_prefs_current_user), MainActivity.DEFAULT_USERNAME));
+        */
     }
 
-    private View.OnClickListener onMatchScoutingClick = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
-            NavigationManager navManager = NavigationManager.getInstance();
-            navManager.navigateToFragment(MatchScoutingFragment.newInstance());
-        }
+    private View.OnClickListener onMatchScoutingClick = view -> {
+        NavigationManager navManager = NavigationManager.getInstance();
+        navManager.navigateToFragment(MatchScoutingFragment.newInstance());
     };
 
-    private View.OnClickListener onPitScoutingClick = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
-            NavigationManager navManager = NavigationManager.getInstance();
-            navManager.navigateToFragment(PitScoutingFragment.newInstance());
-        }
+    private View.OnClickListener onPitScoutingClick = view -> {
+        NavigationManager navManager = NavigationManager.getInstance();
+        navManager.navigateToFragment(PitScoutingFragment.newInstance());
     };
 
 }
