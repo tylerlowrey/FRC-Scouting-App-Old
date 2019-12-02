@@ -17,13 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.Scope;
-
 public class LoginScreenFragment extends Fragment
 {
 
@@ -57,11 +50,6 @@ public class LoginScreenFragment extends Fragment
     {
         Button nextFragBtn = getView().findViewById(R.id.login_submit_button);
         nextFragBtn.setOnClickListener(handleClick);
-        /* TODO: Remove this
-        Button debugBtn = getView().findViewById(R.id.debug_button_list_files);
-        debugBtn.setOnClickListener(handleDebugClick);
-
-         */
     }
 
     private View.OnClickListener handleClick = (View view) -> {
@@ -82,17 +70,6 @@ public class LoginScreenFragment extends Fragment
             editor.putString(getString(R.string.shared_prefs_current_user), newUsername);
             editor.apply();
             navManager.navigateToFragment(MenuFragment.newInstance());
-    };
-
-    private View.OnClickListener handleDebugClick = (View view) -> {
-        Scope SCOPE_ACCESS_FILES = new Scope(Scopes.DRIVE_FILE);
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                                .requestScopes(SCOPE_ACCESS_FILES)
-                                                .requestEmail()
-                                                .build();
-
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getActivity().getApplicationContext(), signInOptions);
-        getActivity().startActivityForResult(googleSignInClient.getSignInIntent(), MainActivity.REQUEST_CODE_SIGN_IN);
     };
 
 }

@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pit_form_container"
+    android:id="@+id/pit_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PitScoutingFragment"
@@ -17,6 +17,7 @@
         >
 
             <LinearLayout
+                android:id="@+id/pit_form_root_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -25,7 +26,7 @@
                 <!-- Team Number Entry -->
                 <!-- FIRST FORM ELEMENT -->
                 <LinearLayout
-                    android:id="@+id/pit_form_item_1"
+                    android:id="@+id/pit_form_item_first"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="25dp"
@@ -35,29 +36,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     >
-
                     <TextView
+                        android:id="@+id/pit_form_item_first_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
                         android:paddingVertical="5dp"
-                        android:text="Team Number"
+                        android:text="@string/team_number_box_title"
                         android:textColor="#000"
                         android:textSize="20sp"
-                        android:background="#E6E6E6"
+                        android:background="@drawable/form_element_title_bg"
                         />
-
                     <EditText
+                        android:id="@+id/pit_form_team_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#FFF"
+                        android:background="@drawable/form_element_body_bg"
                         android:textColor="#000"
                         android:textSize="24sp"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="2dp"
                         android:inputType="number"
+                        android:hint="@string/team_number_hint"
                         />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -70,29 +71,48 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     >
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
                         android:paddingVertical="5dp"
-                        android:text="Team Number"
+                        android:text="@string/drive_train_type_box_title"
                         android:textColor="#000"
                         android:textSize="20sp"
-                        android:background="#E6E6E6"
+                        android:background="@drawable/form_element_title_bg"
                         />
-
-                    <EditText
+                    <RadioGroup
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#FFF"
-                        android:textColor="#000"
-                        android:textSize="24sp"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="2dp"
-                        android:inputType="number"
-                        />
-
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:background="@drawable/form_element_body_bg"
+                        android:padding="2dp"
+                        >
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/drive_train_tank_drive_option"
+                            android:buttonTint="@color/light_grey"
+                            android:textSize="22sp"
+                            android:layout_margin="4dp"
+                            />
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/drive_train_mechanum_drive_option"
+                            android:buttonTint="@color/light_grey"
+                            android:textSize="22sp"
+                            android:layout_margin="4dp"
+                            />
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/drive_train_swerve_drive_option"
+                            android:buttonTint="@color/light_grey"
+                            android:textSize="22sp"
+                            android:layout_margin="4dp"
+                            />
+                    </RadioGroup>
                 </LinearLayout>
 
                 <LinearLayout
@@ -105,211 +125,86 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     >
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
                         android:paddingVertical="5dp"
-                        android:text="Team Number"
+                        android:text="@string/has_autonomous_box_title"
                         android:textColor="#000"
                         android:textSize="20sp"
-                        android:background="#E6E6E6"
+                        android:background="@drawable/form_element_title_bg"
                         />
-
-                    <EditText
+                    <RadioGroup
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#FFF"
-                        android:textColor="#000"
-                        android:textSize="24sp"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="2dp"
-                        android:inputType="number"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="25dp"
-                    android:layout_marginVertical="15dp"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="5dp"
-                        android:text="Team Number"
-                        android:textColor="#000"
-                        android:textSize="20sp"
-                        android:background="#E6E6E6"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#FFF"
-                        android:textColor="#000"
-                        android:textSize="24sp"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="2dp"
-                        android:inputType="number"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="25dp"
-                    android:layout_marginVertical="15dp"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="5dp"
-                        android:text="Team Number"
-                        android:textColor="#000"
-                        android:textSize="20sp"
-                        android:background="#E6E6E6"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#FFF"
-                        android:textColor="#000"
-                        android:textSize="24sp"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="2dp"
-                        android:inputType="number"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="25dp"
-                    android:layout_marginVertical="15dp"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="5dp"
-                        android:text="Team Number"
-                        android:textColor="#000"
-                        android:textSize="20sp"
-                        android:background="#E6E6E6"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#FFF"
-                        android:textColor="#000"
-                        android:textSize="24sp"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="2dp"
-                        android:inputType="number"
-                        />
-
-                </LinearLayout>
-
-
-
-
-                <LinearLayout
-                    android:id="@+id/pit_form_item_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="25dp"
-                    android:layout_marginVertical="15dp"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="5dp"
-                        android:text="Team Number"
-                        android:textColor="#000"
-                        android:textSize="20sp"
-                        android:background="#E6E6E6"
-                        />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#FFF"
-                        android:textColor="#000"
-                        android:textSize="24sp"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="2dp"
-                        android:inputType="number"
-                        />
-
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@drawable/form_element_body_bg"
+                        android:padding="2dp"
+                        >
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/radio_button_text_YES"
+                            android:buttonTint="@color/light_grey"
+                            android:textSize="22sp"
+                            android:layout_margin="4dp"
+                            />
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/radio_button_text_NO"
+                            android:buttonTint="@color/light_grey"
+                            android:textSize="22sp"
+                            android:layout_margin="4dp"
+                            />
+                    </RadioGroup>
                 </LinearLayout>
 
                 <!-- LAST FORM ELEMENT -->
                 <LinearLayout
-                    android:id="@+id/pit_form_item_3"
+                    android:id="@+id/pit_form_item_last"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="25dp"
                     android:layout_marginVertical="15dp"
                     android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@id/pit_form_item_1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     >
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
                         android:paddingVertical="5dp"
-                        android:text="Team Number"
+                        android:text="@string/extra_details_box_title"
                         android:textColor="#000"
                         android:textSize="20sp"
-                        android:background="#E6E6E6"
+                        android:background="@drawable/form_element_title_bg"
                         />
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#FFF"
+                        android:background="@drawable/form_element_body_bg"
                         android:textColor="#000"
                         android:textSize="24sp"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="2dp"
-                        android:inputType="number"
+                        android:inputType="textMultiLine"
+                        android:gravity="top|start"
+                        android:scrollbars="vertical"
+                        android:lines="4"
+                        android:hint="@string/extra_details_hint"
                         />
-
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="107dp"
+                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    tools:src="@tools:sample/avatars[6]" />
 
                 <Button
                     android:id="@+id/take_picture_button"
@@ -320,11 +215,11 @@
                     android:paddingVertical="15dp"
                     android:paddingHorizontal="20dp"
                     android:layout_marginBottom="100dp"
-                    android:text="Take Picture"
+                    android:text="@string/take_picture_btn"
                     android:textSize="19sp"
                     android:textAllCaps="false"
                     android:drawableLeft="@drawable/camera"
-                    android:background="@drawable/take_picture_button"
+                    android:background="@drawable/take_picture_button_text"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -332,17 +227,11 @@
 
             </LinearLayout>
 
-
-
-
     </ScrollView>
-
-
-
 
     <Button
         android:id="@+id/pit_scouting_submit_button"
-        android:text="Submit"
+        android:text="@string/submit_form_text"
         android:textSize="24sp"
         android:background="@drawable/form_submit_button"
         android:layout_width="match_parent"

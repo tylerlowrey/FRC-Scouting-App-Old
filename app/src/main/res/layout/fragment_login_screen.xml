@@ -39,12 +39,12 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:inputType="textPersonName|textCapCharacters"
-            android:hint="Enter Your Username"
+            android:hint="@string/login_screen_hint"
             />
 
         <Button
             android:id="@+id/login_submit_button"
-            android:text="Submit"
+            android:text="@string/submit_form_text"
             android:textSize="20sp"
             android:background="@drawable/form_submit_button"
             android:paddingVertical="5dp"
@@ -53,18 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             />
-        <!-- TODO: Remove this
-        <Button
-            android:id="@+id/debug_button_list_files"
-            android:text="List Files Debug Test"
-            android:textSize="20sp"
-            android:layout_marginTop="40dp"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="50dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            />
-            -->
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

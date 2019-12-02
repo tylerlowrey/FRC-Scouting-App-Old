@@ -1,8 +1,6 @@
 package com.tylerlowrey.frcscoutingapp;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-
 
 public class MenuFragment extends Fragment
 {
@@ -51,12 +47,6 @@ public class MenuFragment extends Fragment
         Button pitScoutingBtn = getView().findViewById(R.id.menu_pit_scouting_button);
         pitScoutingBtn.setOnClickListener(onPitScoutingClick);
 
-        //TODO: Remove this
-        /*
-        TextView testText = getView().findViewById(R.id.test_shared_pref_username);
-        SharedPreferences sharedPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-        testText.setText(sharedPrefs.getString(getString(R.string.shared_prefs_current_user), MainActivity.DEFAULT_USERNAME));
-        */
     }
 
     private View.OnClickListener onMatchScoutingClick = view -> {

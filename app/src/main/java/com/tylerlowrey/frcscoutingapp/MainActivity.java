@@ -11,8 +11,15 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -58,41 +65,28 @@ public class MainActivity extends AppCompatActivity
             case REQUEST_CODE_SIGN_IN:
                 if(resultCode == MainActivity.RESULT_OK && resultData != null)
                 {
-                    Log.d(MainActivity.TAG, "onActivityResult: REQUEST_CODE_SIGN_IN [" + requestCode + "], Result Code:" + resultCode);
-                    Bundle bundle = resultData.getExtras();
-                    for(String key: bundle.keySet())
-                    {
-                        Log.d(TAG, key + " = " + bundle.get(key));
-                    }
                     handleSignInResult(resultData);
                 }
-            case REQUEST_CODE_UPLOAD_FILES:
-                Log.d(MainActivity.TAG, "onActivityResult: REQUEST_CODE_SIGN_IN [" + requestCode + "], Result Code:" + resultCode);
+           /* case REQUEST_CODE_UPLOAD_FILES:
                 if(FileUploader.getInstance().hasFilePermissions(this))
                 {
                     try
                     {
-                        //Upload files
-                        FileUploader.getInstance().uploadFiles("local");
+                        FileUploader.getInstance().uploadLocalFiles();
                         Log.d(TAG, "Files uploaded");
                         makeToast(getApplicationContext(), "Files uploaded.", Toast.LENGTH_LONG);
-
-                        //
                     }
                     catch (IOException e)
                     {
                         Log.d(TAG, "Unable to upload files");
-                        makeToast(getApplicationContext(), "Unable to upload files", Toast.LENGTH_LONG);
+                        makeToast(getApplicationContext(), "Error: Unable to upload files", Toast.LENGTH_LONG);
                     }
-
-
-
                 }
                 else
                 {
                     Log.d(TAG, "Did not have permissions");
                 }
-                break;
+                break; */
             default:
                 Log.d(MainActivity.TAG, "onActivityResult: default case reached " + requestCode + ", " + resultCode);
                 Bundle bundle = resultData.getExtras();
@@ -122,7 +116,19 @@ public class MainActivity extends AppCompatActivity
                 NavigationManager.getInstance().navigateToFragment(MenuFragment.newInstance());
                 return true;
             case R.id.action_upload_files:
-                //TODO: Figure out what to put here
+                try
+                {
+                    if(!FileUploader.getInstance().isSignedIntoDrive(getApplicationContext()))
+                        FileUploader.getInstance().signIntoDrive(this);
+                    else
+                        FileUploader.getInstance().uploadLocalFiles();
+
+                }
+                catch (IOException e)
+                {
+                    Log.d(TAG, "Unable to upload files");
+                    makeToast(getApplicationContext(), "Error: Unable to upload files", Toast.LENGTH_LONG);
+                }
                 return true;
             case R.id.action_change_user:
                 NavigationManager.getInstance().navigateToFragment(LoginScreenFragment.newInstance());
@@ -138,9 +144,27 @@ public class MainActivity extends AppCompatActivity
     private void handleSignInResult(Intent result)
     {
         GoogleSignIn.getSignedInAccountFromIntent(result)
-                    .addOnSuccessListener(googleAccount -> {
-                        MainActivity.makeToast(getApplicationContext(), "Signed in as " + googleAccount.getEmail(), Toast.LENGTH_LONG);
-                    });
+                .addOnSuccessListener(googleAccount -> {
+                    Log.d(TAG, "Signed in as " + googleAccount.getEmail());
+
+                    // Use the authenticated account to sign in to the Drive service.
+                    GoogleAccountCredential credential =
+                            GoogleAccountCredential.usingOAuth2(
+                                    this, Collections.singleton(DriveScopes.DRIVE_FILE));
+                    credential.setSelectedAccount(googleAccount.getAccount());
+                    Drive googleDriveService =
+                            new Drive.Builder(
+                                    AndroidHttp.newCompatibleTransport(),
+                                    new GsonFactory(),
+                                    credential)
+                                    .setApplicationName("Drive API Migration")
+                                    .build();
+
+                    // The DriveServiceHelper encapsulates all REST API and SAF functionality.
+                    // Its instantiation is required before handling any onClick actions.
+                    FileUploader.getInstance().setDriveService(googleDriveService);
+                })
+                .addOnFailureListener(exception -> Log.e(TAG, "Unable to sign in.", exception));
 
     }
 

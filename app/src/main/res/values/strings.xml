@@ -6,4 +6,25 @@
     <string name="action_change_user">Change User</string>
     <string name="action_go_to_settings">App Settings</string>
     <string name="action_main_menu">Go to Main Menu</string>
+    <string name="settings_not_signed_in">Log in to Google Drive</string>
+    <string name="settings_already_signed_in">Logout of Google Drive</string>
+    <string name="team_number_hint">Ex: 283</string>
+    <string name="team_number_box_title">Team Number</string>
+    <string name="extra_details_box_title">Additional Information</string>
+    <string name="extra_details_hint">Ex: Robot has a custom lifting mechanism that...</string>
+    <string name="drive_train_type_box_title">Type of Drive Train</string>
+    <string name="drive_train_swerve_drive_option">Swerve Drive</string>
+    <string name="drive_train_tank_drive_option">Tank Drive</string>
+    <string name="drive_train_mechanum_drive_option">Mechanum Drive</string>
+    <string name="take_picture_btn">Take Picture</string>
+    <string name="submit_form_text">Submit</string>
+    <string name="radio_button_text_NO">No</string>
+    <string name="radio_button_text_YES">Yes</string>
+    <string name="has_autonomous_box_title">Has Autonomous?</string>
+    <string name="login_screen_hint">Enter Your Username</string>
+    <string name="crossed_baseline_box_title">Crossed Baseline in Auto?</string>
+    <string name="points_scored_in_auto_box_title">How Many Points Scored in Auto?</string>
+    <string name="number_of_points_hint">Ex: 15</string>
+    <string name="number_of_points_teleop_title">How Many Points in Teleop?</string>
+    <string name="played_defense_box_title">Played Defense?</string>
 </resources>
