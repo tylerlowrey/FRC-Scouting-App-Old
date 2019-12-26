@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<FORM>
+    <INPUT type="text" title="Enter a number" inputType="number"/>
+    <INPUT type="text" title="Hello There!" />
+    <INPUT type="text" title="Test title" hint="This is a hint"/>
+</FORM>

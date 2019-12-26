@@ -1,34 +1,30 @@
 package com.tylerlowrey.frcscoutingapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
 
+/**
+ * The primary and only Activity for the App. The Main Activity handles the interaction with the
+ * Android back button, Inflates the AppBar options menu, and provides functionality for the
+ * AppBar options menu
+ */
 public class MainActivity extends AppCompatActivity
 {
 
     public static final String TAG = "MAIN_ACTIVITY";
-    public static final int REQUEST_CODE_SIGN_IN = 1;
-    public static final int REQUEST_CODE_UPLOAD_FILES = 2;
     public static final String DEFAULT_USERNAME = "Default_User";
 
+    /**
+     * Initializes the singleton instance of the NavigationManager class and sets the activity
+     * layout for the app
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -41,6 +37,12 @@ public class MainActivity extends AppCompatActivity
         navManager.navigateToFragment(LoginScreenFragment.newInstance());
     }
 
+    /**
+     * Makes sure that the Android back button pops the back stack so that the user can properly
+     * navigate back to older fragments
+     *
+     * @post The size of the backstack will decrease by one (unless it is already 1)
+     */
     @Override
     public void onBackPressed()
     {
@@ -54,60 +56,25 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     /**
-     * Google Sign In stuff
+     * Inflates the AppBar options menu (defined in res/menu/optionsmenu.xml)
      */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData)
-    {
-        switch(requestCode)
-        {
-            case REQUEST_CODE_SIGN_IN:
-                if(resultCode == MainActivity.RESULT_OK && resultData != null)
-                {
-                    handleSignInResult(resultData);
-                }
-           /* case REQUEST_CODE_UPLOAD_FILES:
-                if(FileUploader.getInstance().hasFilePermissions(this))
-                {
-                    try
-                    {
-                        FileUploader.getInstance().uploadLocalFiles();
-                        Log.d(TAG, "Files uploaded");
-                        makeToast(getApplicationContext(), "Files uploaded.", Toast.LENGTH_LONG);
-                    }
-                    catch (IOException e)
-                    {
-                        Log.d(TAG, "Unable to upload files");
-                        makeToast(getApplicationContext(), "Error: Unable to upload files", Toast.LENGTH_LONG);
-                    }
-                }
-                else
-                {
-                    Log.d(TAG, "Did not have permissions");
-                }
-                break; */
-            default:
-                Log.d(MainActivity.TAG, "onActivityResult: default case reached " + requestCode + ", " + resultCode);
-                Bundle bundle = resultData.getExtras();
-                for(String key: bundle.keySet())
-                {
-                    Log.d(TAG, key + " = " + bundle.get(key));
-                }
-
-        }
-
-        super.onActivityResult(requestCode, resultCode, resultData);
-    }
-
-    //Adapted from Zybooks 4.1.2
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.optionsmenu, menu);
         return true;
     }
 
-    //Adapted from Zybooks Figure 4.1.3
+    /**
+     * Navigates the user based on what App option menu item they selected
+     *
+     * @param item - The menu item that has been selected by the user
+     *
+     * @pre item must be a valid menu item as defined in res/menu/optionsmenu.xml
+     * @post The user will be navigated to the fragment corresponding to the menu item
+     * Code adapted from Zybooks Figure 4.1.3
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -115,62 +82,30 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_main_menu:
                 NavigationManager.getInstance().navigateToFragment(MenuFragment.newInstance());
                 return true;
-            case R.id.action_upload_files:
-                try
-                {
-                    if(!FileUploader.getInstance().isSignedIntoDrive(getApplicationContext()))
-                        FileUploader.getInstance().signIntoDrive(this);
-                    else
-                        FileUploader.getInstance().uploadLocalFiles();
-
-                }
-                catch (IOException e)
-                {
-                    Log.d(TAG, "Unable to upload files");
-                    makeToast(getApplicationContext(), "Error: Unable to upload files", Toast.LENGTH_LONG);
-                }
-                return true;
             case R.id.action_change_user:
                 NavigationManager.getInstance().navigateToFragment(LoginScreenFragment.newInstance());
-                return true;
-            case R.id.action_go_to_settings:
-                NavigationManager.getInstance().navigateToFragment(AppSettingsFragment.newInstance());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void handleSignInResult(Intent result)
-    {
-        GoogleSignIn.getSignedInAccountFromIntent(result)
-                .addOnSuccessListener(googleAccount -> {
-                    Log.d(TAG, "Signed in as " + googleAccount.getEmail());
-
-                    // Use the authenticated account to sign in to the Drive service.
-                    GoogleAccountCredential credential =
-                            GoogleAccountCredential.usingOAuth2(
-                                    this, Collections.singleton(DriveScopes.DRIVE_FILE));
-                    credential.setSelectedAccount(googleAccount.getAccount());
-                    Drive googleDriveService =
-                            new Drive.Builder(
-                                    AndroidHttp.newCompatibleTransport(),
-                                    new GsonFactory(),
-                                    credential)
-                                    .setApplicationName("Drive API Migration")
-                                    .build();
-
-                    // The DriveServiceHelper encapsulates all REST API and SAF functionality.
-                    // Its instantiation is required before handling any onClick actions.
-                    FileUploader.getInstance().setDriveService(googleDriveService);
-                })
-                .addOnFailureListener(exception -> Log.e(TAG, "Unable to sign in.", exception));
-
-    }
-
+    /**
+     * Displays a Toast to the user to provide feedback
+     */
     public static void makeToast(Context context, String message, int duration)
     {
         Toast toast = Toast.makeText(context, message, duration);
         toast.show();
+    }
+
+    /**
+     * Displays an error dialog box
+     */
+    public static void displayErrorDialog(AppCompatActivity activity, String message)
+    {
+        FragmentManager manager = activity.getSupportFragmentManager();
+        ErrorDialogFragment dialog = new ErrorDialogFragment(message);
+        dialog.show(manager, "errorDialog");
     }
 }

@@ -23,7 +23,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,8 +32,14 @@ import androidx.fragment.app.Fragment;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Objects;
 
+
+/**
+ * Provides logic and the Fragment implementation for the Pit Scouting Form
+ * Adds event listeners to the buttons of the Pit Scouting Fragment
+ */
 public class PitScoutingFragment extends Fragment
 {
 
@@ -50,12 +55,19 @@ public class PitScoutingFragment extends Fragment
         // Required empty public constructor
     }
 
+    /**
+     * Returns a new instance of the PitScoutingFragment class
+     * @return PitScoutingFragment - A new instance of the PitScoutingFragment class
+     */
     public static PitScoutingFragment newInstance()
     {
         PitScoutingFragment fragment = new PitScoutingFragment();
         return fragment;
     }
 
+    /**
+     * Inflates the fragment and makes sure the AppBar is shown to the user
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -65,18 +77,29 @@ public class PitScoutingFragment extends Fragment
         return inflater.inflate(R.layout.fragment_pit_scouting, container, false);
     }
 
+    /**
+     * This function sets up all of the button click event handler functions and stores
+     * references to view objects that are used in other functions in order to grab data
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         formContainer = view.findViewById(R.id.pit_form_root_linear_layout);
+
+        FormGenerator.generatePitScoutingForm((AppCompatActivity) getActivity(), formContainer);
+
         Button takePictureBtn = view.findViewById(R.id.take_picture_button);
         takePictureBtn.setOnClickListener(onTakePictureClick);
         Button submitFormBtn = view.findViewById(R.id.pit_scouting_submit_button);
         submitFormBtn.setOnClickListener(onSubmitForm);
         imageView = view.findViewById(R.id.imageView);
-        teamNumberEditText = view.findViewById(R.id.pit_form_team_number);
+        //teamNumberEditText = view.findViewById(R.id.pit_form_team_number);
     }
 
+    /**
+     * Requests Camera permissions if they have not already been given. Otherwise, displays
+     * a Camera view so that the user can take a picture
+     */
     private View.OnClickListener onTakePictureClick = view -> {
         if (Objects.requireNonNull(getActivity()).checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
         {
@@ -170,6 +193,13 @@ public class PitScoutingFragment extends Fragment
         }
     }
 
+    /**
+     * Iterates through form data and saves the data onto external storage
+     *
+     * @pre All form data should be valid input
+     * @post A new file with the format USERNAME_TEAMNUMBER_DATETIME.csv will be stored on the external
+     *       storage
+     */
     private View.OnClickListener onSubmitForm = (View view) -> {
         StringBuilder headerStr = new StringBuilder();
         StringBuilder dataStr = new StringBuilder();
@@ -189,18 +219,17 @@ public class PitScoutingFragment extends Fragment
         dataStr.replace(dataStr.length() - 1, dataStr.length(), "\n");
         headerStr.replace(headerStr.length() - 1, headerStr.length(), "\n");
 
-        FileUploader fileUploader = FileUploader.getInstance();
+        FileSaver fileSaver = FileSaver.getInstance();
 
         SharedPreferences sharedPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         String username = sharedPrefs.getString(getString(R.string.shared_prefs_current_user),
                                                 MainActivity.DEFAULT_USERNAME);
 
-
         try
         {
             String nameOfCSVFile = String.format("%s_%s_%s.csv", username, teamNumberEditText.getText(), Calendar.getInstance().getTime());
-            if(fileUploader.hasFilePermissions(getActivity()))
-                fileUploader.saveTextFileLocally(nameOfCSVFile, headerStr.toString() + dataStr.toString());
+            if(fileSaver.hasFilePermissions(getActivity()))
+                fileSaver.saveTextFileLocally(nameOfCSVFile, headerStr.toString() + dataStr.toString());
 
             MainActivity.makeToast(getContext(), "Form Saved Successfully", Toast.LENGTH_LONG);
         }
@@ -212,6 +241,12 @@ public class PitScoutingFragment extends Fragment
 
     };
 
+    /**
+     * Takes in a view and returns the data that is contained within the view
+     *
+     * @param view - a valid View object.
+     * @return String - If view is an EditText or RadioGroup View, Returns the data contained within the view
+     */
     private String getStringDataFromView(View view)
     {
         if(view instanceof EditText)

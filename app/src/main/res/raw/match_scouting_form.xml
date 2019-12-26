@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<FORM>
+    <INPUT type="text" title="Hello, World" />
+    <INPUT type="textarea" title="Test 1" lines="5"/>
+    <INPUT type="select" title="test 2">
+        <OPTION>Select One</OPTION>
+        <OPTION>Select Two</OPTION>
+        <OPTION>Select Three</OPTION>
+    </INPUT>
+    <INPUT type="checkbox" title="input 4">
+        <OPTION>Checkbox 1</OPTION>
+        <OPTION>Checkbox 2</OPTION>
+        <OPTION>Checkbox 3</OPTION>
+    </INPUT>
+    <INPUT type="dropdown" title="in 5">
+        <OPTION>Drop 1</OPTION>
+        <OPTION value="Dropdown 1234">Drop 2</OPTION>
+        <OPTION>Drop 3</OPTION>
+    </INPUT>
+</FORM>

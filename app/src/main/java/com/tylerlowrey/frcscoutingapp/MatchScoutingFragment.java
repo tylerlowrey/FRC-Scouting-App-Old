@@ -23,6 +23,10 @@ import androidx.fragment.app.Fragment;
 import java.io.IOException;
 import java.util.Calendar;
 
+/**
+ * Provides logic and the Fragment implementation for the Match Scouting Form
+ * Adds event listeners to the buttons of the Match Scouting Fragment
+ */
 public class MatchScoutingFragment extends Fragment
 {
 
@@ -35,12 +39,19 @@ public class MatchScoutingFragment extends Fragment
         // Required empty public constructor
     }
 
+    /**
+     * Returns a new instance of the PitScoutingFragment class
+     * @return MatchScoutingFragment - A new instance of the MatchScoutingFragment class
+     */
     public static MatchScoutingFragment newInstance()
     {
-        MatchScoutingFragment fragment = new  MatchScoutingFragment();
+        MatchScoutingFragment fragment = new MatchScoutingFragment();
         return fragment;
     }
 
+    /**
+     * Inflates the fragment and makes sure the AppBar is shown to the user
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -50,6 +61,11 @@ public class MatchScoutingFragment extends Fragment
         return inflater.inflate(R.layout.fragment_match_scouting, container, false);
     }
 
+
+    /**
+     * This function sets up all of the button click event handler functions and stores
+     * references to view objects that are used in other functions in order to grab data
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
@@ -61,6 +77,13 @@ public class MatchScoutingFragment extends Fragment
 
     }
 
+    /**
+     * Iterates through form data and saves the data onto external storage
+     *
+     * @pre All form data should be valid input
+     * @post A new file with the format USERNAME_TEAMNUMBER_DATETIME.csv will be stored on the external
+     *       storage
+     */
     private View.OnClickListener onSubmitForm = (View view) -> {
         StringBuilder headerStr = new StringBuilder();
         StringBuilder dataStr = new StringBuilder();
@@ -80,7 +103,7 @@ public class MatchScoutingFragment extends Fragment
         dataStr.replace(dataStr.length() - 1, dataStr.length(), "\n");
         headerStr.replace(headerStr.length() - 1, headerStr.length(), "\n");
 
-        FileUploader fileUploader = FileUploader.getInstance();
+        FileSaver fileSaver = FileSaver.getInstance();
 
         SharedPreferences sharedPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         String username = sharedPrefs.getString(getString(R.string.shared_prefs_current_user),
@@ -90,8 +113,8 @@ public class MatchScoutingFragment extends Fragment
         try
         {
             String nameOfCSVFile = String.format("%s_%s_%s.csv", username, teamNumberEditText.getText(), Calendar.getInstance().getTime());
-            if(fileUploader.hasFilePermissions(getActivity()))
-                fileUploader.saveTextFileLocally(nameOfCSVFile, headerStr.toString() + dataStr.toString());
+            if(fileSaver.hasFilePermissions(getActivity()))
+                fileSaver.saveTextFileLocally(nameOfCSVFile, headerStr.toString() + dataStr.toString());
 
             MainActivity.makeToast(getContext(), "Form Saved Successfully", Toast.LENGTH_LONG);
         }
@@ -103,6 +126,12 @@ public class MatchScoutingFragment extends Fragment
 
     };
 
+    /**
+     * Takes in a view and returns the data that is contained within the view
+     *
+     * @param view - a valid View object.
+     * @return String - If view is an EditText or RadioGroup View, Returns the data contained within the view
+     */
     private String getStringDataFromView(View view)
     {
         if(view instanceof EditText)

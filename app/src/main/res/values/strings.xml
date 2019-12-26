@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FRC Scouting App</string>
+    <string name="app_name">FRC 283 Scouting App</string>
     <string name="shared_prefs_current_user">CURRENT_USER</string>
     <string name="default_username">Default_User</string>
     <string name="action_upload_files">Upload Files</string>
@@ -27,4 +27,6 @@
     <string name="number_of_points_hint">Ex: 15</string>
     <string name="number_of_points_teleop_title">How Many Points in Teleop?</string>
     <string name="played_defense_box_title">Played Defense?</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="ok_button_text">OK</string>
 </resources>
