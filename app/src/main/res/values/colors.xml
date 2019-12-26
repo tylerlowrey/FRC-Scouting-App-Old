@@ -6,4 +6,6 @@
     <color name="colorPrimaryBackground">#8D0000</color>
     <color name="colorPrimaryText">#FFFFFF</color>
     <color name="light_grey">#CCCCCC</color>
+    <color name="form_input_title_text_color">#000000</color>
+    <color name="form_input_body_text_color">#000000</color>
 </resources>

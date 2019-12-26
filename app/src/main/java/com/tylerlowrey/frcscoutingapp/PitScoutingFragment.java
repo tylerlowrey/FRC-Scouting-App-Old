@@ -88,11 +88,13 @@ public class PitScoutingFragment extends Fragment
 
         FormGenerator.generatePitScoutingForm((AppCompatActivity) getActivity(), formContainer);
 
+        getLayoutInflater().inflate(R.layout.take_picture_button, formContainer);
+
         Button takePictureBtn = view.findViewById(R.id.take_picture_button);
         takePictureBtn.setOnClickListener(onTakePictureClick);
+
         Button submitFormBtn = view.findViewById(R.id.pit_scouting_submit_button);
         submitFormBtn.setOnClickListener(onSubmitForm);
-        imageView = view.findViewById(R.id.imageView);
         //teamNumberEditText = view.findViewById(R.id.pit_form_team_number);
     }
 
