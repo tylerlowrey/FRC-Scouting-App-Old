@@ -71,10 +71,10 @@ public class TextInputView extends LinearLayout
         inputBoxText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         int textInputPadding = (int) convertPixelToDisplayPixel(5.0f);
-        inputBoxText.setPaddingRelative(textInputPadding,
-                                        textInputPadding,
-                                        textInputPadding,
-                                        textInputPadding);
+        inputBoxText.setPadding(textInputPadding,
+                                textInputPadding,
+                                textInputPadding,
+                                textInputPadding);
 
         inputBoxText.setInputType(inputType);
 

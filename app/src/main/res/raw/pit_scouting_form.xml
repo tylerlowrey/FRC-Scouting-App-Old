@@ -3,4 +3,16 @@
     <INPUT type="text" title="Enter a number" inputType="number"/>
     <INPUT type="text" title="Hello There!" />
     <INPUT type="text" title="Test title" hint="This is a hint"/>
+    <INPUT type="textarea" title="Text Area 1" hint="This is the hint for text area 1" numLinesToShow="4" />
+    <INPUT type="textarea" title="Chunk boi" hint="This is the hint for the chunkster" numLinesToShow="15" />
+    <INPUT type="radio" title="Radio buttons" defaultRadioButton="first" valueType="text">
+        <RADIOBUTTON name="first" value="Option 1" />
+        <RADIOBUTTON name="second" value="Option 2" />
+        <RADIOBUTTON name="third" value="Option 3" />
+    </INPUT>
+    <INPUT type="radio" title="Radio buttons" defaultRadioButton="first" valueType="number">
+        <RADIOBUTTON name="first" value="1" />
+        <RADIOBUTTON name="second" value="2" />
+        <RADIOBUTTON name="third" value="3" />
+    </INPUT>
 </FORM>
