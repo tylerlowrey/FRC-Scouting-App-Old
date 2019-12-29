@@ -9,10 +9,13 @@ import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.tylerlowrey.frcscoutingapp.views.CheckboxInputView;
+import com.tylerlowrey.frcscoutingapp.views.DropdownInputView;
 import com.tylerlowrey.frcscoutingapp.views.RadioInputView;
 import com.tylerlowrey.frcscoutingapp.views.TextAreaInputView;
 import com.tylerlowrey.frcscoutingapp.views.TextInputView;
@@ -104,14 +107,9 @@ public class FormGenerator
                 String textInputTitle = element.getAttribute("title");
                 String textInputHint = element.getAttribute("hint");
 
-                TextInputView textInputElement;
+                TextInputView textInputElement = new TextInputView(context, textInputTitle, textInputHint,
+                                                            element.getAttribute("inputType"));
 
-                if(element.getAttribute("inputType").equals("number"))
-                    textInputElement = new TextInputView(context, textInputTitle, textInputHint,
-                                                            InputType.TYPE_CLASS_NUMBER);
-                else
-                    textInputElement = new TextInputView(context, textInputTitle, textInputHint,
-                                                            InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
 
                 rootView.addView(textInputElement);
@@ -136,9 +134,16 @@ public class FormGenerator
                 break;
 
             case "radio":
-                String radioGroupTitle = element.getAttribute("title");
+                String radioInputTitle = element.getAttribute("title");
                 String valueType = element.getAttribute("valueType");
                 String defaultRadioButton = element.getAttribute("defaultRadioButton");
+                String radioButtonsOrientationStr = element.getAttribute("orientation");
+                int radioButtonsOrientation;
+
+                if (radioButtonsOrientationStr.equals("") || radioButtonsOrientationStr.equals("vertical"))
+                    radioButtonsOrientation = RadioGroup.VERTICAL;
+                else
+                    radioButtonsOrientation = RadioGroup.HORIZONTAL;
 
                 NodeList radioButtons = element.getElementsByTagName("RADIOBUTTON");
 
@@ -153,28 +158,62 @@ public class FormGenerator
                     radioButtonsMap.put(radioButton.getAttribute("name"), radioButton.getNodeValue());
                 }
 
-                RadioInputView radioInputView = new RadioInputView(context, radioGroupTitle,
+                RadioInputView radioInputView = new RadioInputView(context, radioInputTitle,
                                                                     radioButtonsMap, valueType,
-                                                                    defaultRadioButton);
+                                                                    defaultRadioButton,
+                                                                    radioButtonsOrientation);
 
                 rootView.addView(radioInputView);
-                break;
-                /*
-            case "checkbox":
-                title = element.getAttribute("title");
-                inputBoxTitle = new TextView(rootView.getContext());
-                inputBoxTitle.setText(title);
 
-                inputBoxHolder.addView(inputBoxTitle);
+                break;
+
+            case "checkbox":
+                String checkboxInputTitle = element.getAttribute("title");
+                String checkboxValueType = element.getAttribute("valueType");
+
+                NodeList checkboxes = element.getElementsByTagName("CHECKBOX");
+
+                Map<String, String> checkboxesMap;
+
+                checkboxesMap = new LinkedHashMap<>();
+
+                for(int nodeIndex = 0; nodeIndex < checkboxes.getLength(); ++nodeIndex)
+                {
+                    Element radioButton = (Element) checkboxes.item(nodeIndex);
+
+                    checkboxesMap.put(radioButton.getAttribute("name"), radioButton.getAttribute("value"));
+                }
+
+                CheckboxInputView checkboxInputView = new CheckboxInputView(context, checkboxInputTitle,
+                                                                            checkboxesMap, checkboxValueType);
+
+                rootView.addView(checkboxInputView);
                 break;
             case "dropdown":
-                title = element.getAttribute("title");
-                inputBoxTitle = new TextView(rootView.getContext());
-                inputBoxTitle.setText(title);
+                String dropdownInputTitle = element.getAttribute("title");
+                String dropdownValueType = element.getAttribute("valueType");
+                String defaultDropdownItem = element.getAttribute("defaultDropdownItem");
 
-                inputBoxHolder.addView(inputBoxTitle);
+                NodeList dropdownItems = element.getElementsByTagName("ITEM");
+
+                Map<String, String> dropdownItemsMap;
+
+                dropdownItemsMap = new LinkedHashMap<>();
+
+                for(int nodeIndex = 0; nodeIndex < dropdownItems.getLength(); ++nodeIndex)
+                {
+                    Element dropdownItem = (Element) dropdownItems.item(nodeIndex);
+
+                    dropdownItemsMap.put(dropdownItem.getAttribute("name"), dropdownItem.getAttribute("value"));
+                }
+
+                DropdownInputView dropdownInputView = new DropdownInputView(context, dropdownInputTitle,
+                                                                            dropdownItemsMap, dropdownValueType,
+                                                                            defaultDropdownItem);
+
+                rootView.addView(dropdownInputView);
                 break;
-                 */
+
             default:
                 throw new Exception("Invalid XML markup (XML Element did not have a valid type attribute)");
         }

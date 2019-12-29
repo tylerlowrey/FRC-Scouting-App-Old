@@ -8,19 +8,18 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.tylerlowrey.frcscoutingapp.R;
 
-public class TextAreaInputView extends LinearLayout
+public class TextAreaInputView extends FormInputView
 {
     private Context context;
     private String title;
     private String hint;
     private int numLinesToShow;
 
-    public TextAreaInputView(Context context, String title, String hint,int numLinesToShow)
+    public TextAreaInputView(Context context, String title, String hint, int numLinesToShow)
     {
         super(context);
 
@@ -42,9 +41,9 @@ public class TextAreaInputView extends LinearLayout
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
 
-        int horizontalPixels = (int) convertPixelToDisplayPixel(25.0f);
+        int horizontalPixels = (int) convertDisplayPixelToPixel(25.0f);
 
-        int verticalPixels = (int) convertPixelToDisplayPixel(15.0f);
+        int verticalPixels = (int) convertDisplayPixelToPixel(15.0f);
 
         layoutParams.setMargins(horizontalPixels, verticalPixels, horizontalPixels, verticalPixels);
         this.setLayoutParams(layoutParams);
@@ -58,7 +57,7 @@ public class TextAreaInputView extends LinearLayout
         inputBoxTitle.setBackground(context.getDrawable(R.drawable.form_element_title_bg));
         inputBoxTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
-        int titlePadding = (int) convertPixelToDisplayPixel(5.0f);
+        int titlePadding = (int) convertDisplayPixelToPixel(5.0f);
         inputBoxTitle.setPadding(titlePadding, titlePadding, titlePadding, titlePadding);
 
 
@@ -72,7 +71,7 @@ public class TextAreaInputView extends LinearLayout
         inputTextArea.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         inputTextArea.setGravity(Gravity.TOP | Gravity.START);
-        int textInputPadding = (int) convertPixelToDisplayPixel(5.0f);
+        int textInputPadding = (int) convertDisplayPixelToPixel(5.0f);
         inputTextArea.setPadding(textInputPadding,
                 textInputPadding,
                 textInputPadding,
@@ -90,13 +89,22 @@ public class TextAreaInputView extends LinearLayout
         this.addView(inputTextArea);
     }
 
-    private float convertPixelToDisplayPixel(float pixelVal)
+    @Override
+    public String getInputName()
     {
-        return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                pixelVal,
-                context.getResources().getDisplayMetrics()
-        );
+        throw new UnsupportedOperationException("CheckBox values and names should be retrieved by using the getCheckBoxValuesandTags");
+    }
+
+    @Override
+    public String getInputValue()
+    {
+        throw new UnsupportedOperationException("CheckBox values and names should be retrieved by using the getCheckBoxValuesandTags");
+    }
+
+    @Override
+    public String getInputType()
+    {
+        return "text";
     }
 
 }

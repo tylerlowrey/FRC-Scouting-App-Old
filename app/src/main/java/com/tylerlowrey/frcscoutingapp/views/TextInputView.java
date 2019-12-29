@@ -2,23 +2,22 @@ package com.tylerlowrey.frcscoutingapp.views;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.text.InputType;
-import android.util.TypedValue;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tylerlowrey.frcscoutingapp.R;
 
-public class TextInputView extends LinearLayout
+public class TextInputView extends FormInputView
 {
     private Context context;
     private String title;
     private String hint;
-    private int inputType;
+    private String inputType;
+    private EditText editText;
 
-    public TextInputView(Context context, String title, String hint, int inputType)
+    public TextInputView(Context context, String title, String hint, String inputType)
     {
         super(context);
 
@@ -41,9 +40,9 @@ public class TextInputView extends LinearLayout
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
 
-        int horizontalPixels = (int) convertPixelToDisplayPixel(25.0f);
+        int horizontalPixels = (int) convertDisplayPixelToPixel(25.0f);
 
-        int verticalPixels = (int) convertPixelToDisplayPixel(15.0f);
+        int verticalPixels = (int) convertDisplayPixelToPixel(15.0f);
 
         layoutParams.setMargins(horizontalPixels, verticalPixels, horizontalPixels, verticalPixels);
         this.setLayoutParams(layoutParams);
@@ -57,7 +56,7 @@ public class TextInputView extends LinearLayout
         inputBoxTitle.setBackground(context.getDrawable(R.drawable.form_element_title_bg));
         inputBoxTitle.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
-        int titlePadding = (int) convertPixelToDisplayPixel(5.0f);
+        int titlePadding = (int) convertDisplayPixelToPixel(5.0f);
         inputBoxTitle.setPadding(titlePadding, titlePadding, titlePadding, titlePadding);
 
 
@@ -70,26 +69,39 @@ public class TextInputView extends LinearLayout
         inputBoxText.setBackground(context.getDrawable(R.drawable.form_element_body_bg));
         inputBoxText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
-        int textInputPadding = (int) convertPixelToDisplayPixel(5.0f);
+        int textInputPadding = (int) convertDisplayPixelToPixel(5.0f);
         inputBoxText.setPadding(textInputPadding,
                                 textInputPadding,
                                 textInputPadding,
                                 textInputPadding);
+        if(inputType.equals("number"))
+            inputBoxText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        else
+            inputBoxText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
-        inputBoxText.setInputType(inputType);
+        this.editText = inputBoxText;
 
         this.addView(inputBoxTitle);
         this.addView(inputBoxText);
 
     }
 
-    private float convertPixelToDisplayPixel(float pixelVal)
+    @Override
+    public String getInputName()
     {
-        return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                pixelVal,
-                context.getResources().getDisplayMetrics()
-        );
+        return (String) editText.getTag();
+    }
+
+    @Override
+    public String getInputValue()
+    {
+        return editText.getText().toString();
+    }
+
+    @Override
+    public String getInputType()
+    {
+        return inputType;
     }
 
 
