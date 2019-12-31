@@ -11,6 +11,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.tylerlowrey.frcscoutingapp.R;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,19 +20,20 @@ public class CheckboxInputView extends FormInputView
 {
     private Context context;
     private String title;
-    private String valueType;
+    private String inputType;
     private Map<String, String> checkBoxesMap;
     private List<CheckBox> checkBoxes;
 
     public CheckboxInputView(Context context, String title, Map<String,String> checkBoxesMap,
-                             String valueType)
+                             String inputType)
     {
         super(context);
 
         this.context = context;
         this.title = title;
         this.checkBoxesMap = checkBoxesMap;
-        this.valueType = valueType;
+        this.inputType = inputType;
+        this.checkBoxes = new ArrayList<>();
 
         init();
     }
@@ -66,16 +68,12 @@ public class CheckboxInputView extends FormInputView
         //-- Create LinearLayout for holding CheckBoxes --
         LinearLayout checkboxesHolder = new LinearLayout(context);
         checkboxesHolder.setOrientation(LinearLayout.VERTICAL);
-        layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT);
+        layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT);
 
-        horizontalPixels = (int) convertDisplayPixelToPixel(25.0f);
-
-        verticalPixels = (int) convertDisplayPixelToPixel(15.0f);
-
-        layoutParams.setMargins(horizontalPixels, verticalPixels, horizontalPixels, verticalPixels);
         checkboxesHolder.setLayoutParams(layoutParams);
         checkboxesHolder.setBackground(context.getDrawable(R.drawable.form_element_body_bg));
+        checkboxesHolder.setTag("checkbox");
 
         for(Map.Entry<String, String> checkboxKeyVal : checkBoxesMap.entrySet())
         {
@@ -92,7 +90,7 @@ public class CheckboxInputView extends FormInputView
             checkbox.setTextColor(resources.getColor(R.color.form_input_body_text_color));
             checkbox.setButtonTintList(AppCompatResources.getColorStateList(context, R.color.form_radio_button_tint));
             checkbox.setTag(checkboxKeyVal.getValue());
-            checkbox.setTextSize(22);
+            checkbox.setTextSize(24);
 
             checkBoxes.add(checkbox);
             checkboxesHolder.addView(checkbox);
@@ -127,9 +125,9 @@ public class CheckboxInputView extends FormInputView
     }
 
     @Override
-    public String getInputValueType()
+    public String getInputType()
     {
-        return valueType;
+        return inputType;
     }
 
 

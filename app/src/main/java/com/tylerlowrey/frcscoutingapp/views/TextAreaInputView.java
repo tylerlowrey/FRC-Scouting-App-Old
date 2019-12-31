@@ -18,6 +18,7 @@ public class TextAreaInputView extends FormInputView
     private String title;
     private String hint;
     private int numLinesToShow;
+    private EditText editText;
 
     public TextAreaInputView(Context context, String title, String hint, int numLinesToShow)
     {
@@ -85,6 +86,7 @@ public class TextAreaInputView extends FormInputView
         inputTextArea.setMinLines(numLinesToShow);
         inputTextArea.setMaxLines(numLinesToShow);
 
+        this.editText = inputTextArea;
         this.addView(inputBoxTitle);
         this.addView(inputTextArea);
     }
@@ -92,13 +94,13 @@ public class TextAreaInputView extends FormInputView
     @Override
     public String getInputName()
     {
-        throw new UnsupportedOperationException("CheckBox values and names should be retrieved by using the getCheckBoxValuesandTags");
+        return (String) editText.getTag();
     }
 
     @Override
     public String getInputValue()
     {
-        throw new UnsupportedOperationException("CheckBox values and names should be retrieved by using the getCheckBoxValuesandTags");
+        return editText.getText().toString();
     }
 
     @Override

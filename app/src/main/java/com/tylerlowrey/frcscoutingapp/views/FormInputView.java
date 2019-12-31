@@ -11,6 +11,7 @@ public abstract class FormInputView extends LinearLayout
     public FormInputView(Context context)
     {
         super(context);
+        this.context = context;
     }
 
     protected float convertDisplayPixelToPixel(float pixelVal)

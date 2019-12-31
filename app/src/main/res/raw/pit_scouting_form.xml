@@ -16,5 +16,11 @@
         <RADIOBUTTON name="third" value="3" />
     </INPUT>
     <INPUT type="checkbox" title="Checkboxes" inputType="number">
+        <CHECKBOX name="hello" value="there" />
+    </INPUT>
+    <INPUT type="dropdown" title="Dropdown" inputType="text" >
+        <ITEM name="One" value="One" />
+        <ITEM name="Two" value="Two" />
+        <Item name="Three" value="Three" />
     </INPUT>
 </FORM>

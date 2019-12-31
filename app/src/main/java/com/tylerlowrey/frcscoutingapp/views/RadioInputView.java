@@ -11,6 +11,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.tylerlowrey.frcscoutingapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class RadioInputView extends FormInputView
         this.radioButtonsMap = radioButtonsMap;
         this.defaultRadioButton = defaultRadioButton;
         this.radioButtonsOrientation = orientation;
+        this.radioButtons = new ArrayList<>();
 
         init();
     }
@@ -109,7 +111,7 @@ public class RadioInputView extends FormInputView
             radioButton.setTextColor(resources.getColor(R.color.form_input_body_text_color));
             radioButton.setButtonTintList(AppCompatResources.getColorStateList(context, R.color.form_radio_button_tint));
             radioButton.setTag(radioButtonKeyVal.getValue());
-            radioButton.setTextSize(22);
+            radioButton.setTextSize(24);
 
             if(radioButtonKeyVal.getKey().equals(defaultRadioButton))
                 radioButton.setSelected(true);

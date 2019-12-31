@@ -49,7 +49,15 @@ public class FormGenerator
         catch (Exception e)
         {
             MainActivity.displayErrorDialog(activity, "Unable to load XML file for Match Scouting Form");
-            Log.e(TAG, "Unable to load XML file for Match Scouting Form" + e);
+
+            StringBuilder stackTraceBuilder = new StringBuilder();
+            for(StackTraceElement stackTraceElement : e.getStackTrace())
+            {
+                stackTraceBuilder.append(stackTraceElement.toString());
+            }
+
+            Log.e(TAG, "Unable to load XML file for Match Scouting Form" + e + "\n" + stackTraceBuilder.toString());
+
             NavigationManager.getInstance().navigateToFragment(new MenuFragment());
         }
 
@@ -69,7 +77,15 @@ public class FormGenerator
         catch (Exception e)
         {
             MainActivity.displayErrorDialog(activity, "Unable to load XML file for Pit Scouting Form");
-            Log.e(TAG, "Unable to load XML file for Pit Scouting Form " + e);
+
+            StringBuilder stackTraceBuilder = new StringBuilder();
+            for(StackTraceElement stackTraceElement : e.getStackTrace())
+            {
+                stackTraceBuilder.append(stackTraceElement.toString());
+            }
+
+            Log.e(TAG, "Unable to load XML file for Pit Scouting Form" + e + "\n" + stackTraceBuilder.toString());
+
             NavigationManager.getInstance().navigateToFragment(new MenuFragment());
         }
     }

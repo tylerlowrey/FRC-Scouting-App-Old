@@ -27,6 +27,11 @@ public class ErrorDialogFragment extends DialogFragment
         builder.setTitle(R.string.error_dialog_title);
         builder.setMessage(errorMessage);
         builder.setPositiveButton(R.string.ok_button_text, null);
-        return builder.create();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener((arg0) -> {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+        });
+
+        return alertDialog;
     }
 }
