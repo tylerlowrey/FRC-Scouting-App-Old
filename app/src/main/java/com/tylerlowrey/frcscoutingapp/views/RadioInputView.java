@@ -96,6 +96,8 @@ public class RadioInputView extends FormInputView
         radioGroup.setLayoutParams(radioGroupLayoutParams);
         radioGroup.setTag(inputType);
 
+        radioGroup.setTag(R.id.input_type, "radio");
+
         //-- Create RadioButtons --
         for(Map.Entry<String, String> radioButtonKeyVal : radioButtonsMap.entrySet())
         {

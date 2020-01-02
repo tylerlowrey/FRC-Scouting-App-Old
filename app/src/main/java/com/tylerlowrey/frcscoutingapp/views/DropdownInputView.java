@@ -91,7 +91,7 @@ public class DropdownInputView extends FormInputView
 
         spinnerHolder.setLayoutParams(layoutParams);
         spinnerHolder.setBackground(context.getDrawable(R.drawable.form_element_body_bg));
-        spinnerHolder.setTag("dropdown");
+        spinnerHolder.setTag(R.id.input_type, "dropdown");
 
         spinnerHolder.addView(spinner);
 

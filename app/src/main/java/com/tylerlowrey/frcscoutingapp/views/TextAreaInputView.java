@@ -86,6 +86,8 @@ public class TextAreaInputView extends FormInputView
         inputTextArea.setMinLines(numLinesToShow);
         inputTextArea.setMaxLines(numLinesToShow);
 
+        inputTextArea.setTag(R.id.input_type, "textarea");
+
         this.editText = inputTextArea;
         this.addView(inputBoxTitle);
         this.addView(inputTextArea);

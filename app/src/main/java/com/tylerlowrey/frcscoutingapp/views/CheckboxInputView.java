@@ -73,7 +73,7 @@ public class CheckboxInputView extends FormInputView
 
         checkboxesHolder.setLayoutParams(layoutParams);
         checkboxesHolder.setBackground(context.getDrawable(R.drawable.form_element_body_bg));
-        checkboxesHolder.setTag("checkbox");
+        checkboxesHolder.setTag(R.id.input_type, "checkbox");
 
         for(Map.Entry<String, String> checkboxKeyVal : checkBoxesMap.entrySet())
         {

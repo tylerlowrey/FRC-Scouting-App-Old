@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,11 +29,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.tylerlowrey.frcscoutingapp.views.CheckboxInputView;
+import com.tylerlowrey.frcscoutingapp.views.DropdownInputView;
+import com.tylerlowrey.frcscoutingapp.views.FormInputView;
+import com.tylerlowrey.frcscoutingapp.views.RadioInputView;
+import com.tylerlowrey.frcscoutingapp.views.TextAreaInputView;
+import com.tylerlowrey.frcscoutingapp.views.TextInputView;
+
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.TimeZone;
 
 
 /**
@@ -45,11 +56,11 @@ public class PitScoutingFragment extends Fragment
 
     public static final String TAG = "PIT_SCOUTING_FRAGMENT";
     private LinearLayout formContainer;
+    private String pictureName;
+    private JSONObject scoutingDataJSON;
     public static final int CAMERA_REQUEST = 1888;
-    private ImageView imageView;
     public static final int CAMERA_PERMISSION_CODE = 100;
-    private EditText teamNumberEditText;
-
+    private ImageView imageHolder;
     public PitScoutingFragment()
     {
         // Required empty public constructor
@@ -138,25 +149,28 @@ public class PitScoutingFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
         {
-
+            imageHolder = new ImageView(getContext());
             Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-            imageView.setImageBitmap(photo);
+            imageHolder.setImageBitmap(photo);
 
             // This updates the image uri to later be saved
             Uri picURI = data.getData();
-            imageView.setImageURI(picURI);
+            imageHolder.setImageURI(picURI);
 
             savePicture();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     // This function serves to saves the imageview into the SD card under as 'user.jpg' with 'user' being the name of the user
     private void savePicture() {
-        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+
+        BitmapDrawable drawable = (BitmapDrawable) imageHolder.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
 
@@ -180,7 +194,8 @@ public class PitScoutingFragment extends Fragment
             String username = sharedPrefs.getString(getString(R.string.shared_prefs_current_user),
                     MainActivity.DEFAULT_USERNAME);
 
-            String fileName = String.format("%s_%s_%s.jpg", username, teamNumberEditText.getText(), Calendar.getInstance().getTime());
+            String fileName = String.format("%s_%s.jpg", username, Calendar.getInstance().getTime());
+            pictureName = fileName;
             File outFile = new File(appLocalStorageDir, fileName);
 
             outStream = new FileOutputStream(outFile);
@@ -193,6 +208,7 @@ public class PitScoutingFragment extends Fragment
         {
             MainActivity.makeToast(getContext(), "ERROR: Unable to Save Picture", Toast.LENGTH_LONG);
         }
+
     }
 
     /**
@@ -203,42 +219,25 @@ public class PitScoutingFragment extends Fragment
      *       storage
      */
     private View.OnClickListener onSubmitForm = (View view) -> {
-        StringBuilder headerStr = new StringBuilder();
-        StringBuilder dataStr = new StringBuilder();
 
-        for(int i = 0; i < formContainer.getChildCount(); ++i)
-        {
-            if(formContainer.getChildAt(i) instanceof LinearLayout)
-            {
-                LinearLayout formElement = (LinearLayout) formContainer.getChildAt(i);
-                TextView formElementTitle = (TextView) formElement.getChildAt(0);
-                headerStr.append(formElementTitle.getText().toString()).append(",");
-                dataStr.append(getStringDataFromView(formElement.getChildAt(1))).append(",");
-
-            }
-        }
-
-        dataStr.replace(dataStr.length() - 1, dataStr.length(), "\n");
-        headerStr.replace(headerStr.length() - 1, headerStr.length(), "\n");
-
-        FileSaver fileSaver = FileSaver.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        long timeFromEpoch = calendar.getTimeInMillis();
 
         SharedPreferences sharedPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         String username = sharedPrefs.getString(getString(R.string.shared_prefs_current_user),
-                                                MainActivity.DEFAULT_USERNAME);
+                MainActivity.DEFAULT_USERNAME);
 
-        try
-        {
-            String nameOfCSVFile = String.format("%s_%s_%s.csv", username, teamNumberEditText.getText(), Calendar.getInstance().getTime());
-            if(fileSaver.hasFilePermissions(getActivity()))
-                fileSaver.saveTextFileLocally(nameOfCSVFile, headerStr.toString() + dataStr.toString());
+        if(pictureName == null)
+            pictureName = "";
 
-            MainActivity.makeToast(getContext(), "Form Saved Successfully", Toast.LENGTH_LONG);
-        }
-        catch (IOException e)
+
+        for(int i = 0; i < formContainer.getChildCount(); ++i)
         {
-            Log.d(TAG, "Error while trying to save file to external storage. Error details: " + e.toString());
-            MainActivity.makeToast(getContext(), "ERROR: Unable to Save File", Toast.LENGTH_LONG);
+            if(formContainer.getChildAt(i) instanceof FormInputView)
+            {
+                LinearLayout formElement = (LinearLayout) formContainer.getChildAt(i);
+                getDataFromFormElement(formElement);
+            }
         }
 
     };
@@ -261,8 +260,35 @@ public class PitScoutingFragment extends Fragment
             RadioButton selectedButton = getActivity().findViewById(radioGroup.getCheckedRadioButtonId());
             return selectedButton.getText().toString();
         }
-
         return "";
+    }
+
+    private void getDataFromFormElement(View view)
+    {
+        FormInputView formInputView = (FormInputView) view;
+
+        View element = formInputView.getChildAt(1);
+
+        String inputType = (String) element.getTag(R.id.input_type);
+
+        switch(inputType)
+        {
+            case "text":
+                TextInputView textInputView = (TextInputView) formInputView;
+                break;
+            case "textarea":
+                TextAreaInputView textAreaInputView = (TextAreaInputView) formInputView;
+                break;
+            case "radio":
+                RadioInputView radioInputView = (RadioInputView) formInputView;
+                break;
+            case "checkbox":
+                CheckboxInputView checkboxInputView = (CheckboxInputView) formInputView;
+                break;
+            case "dropdown":
+                DropdownInputView dropdownInputView = (DropdownInputView) formInputView;
+                break;
+        }
     }
 
 

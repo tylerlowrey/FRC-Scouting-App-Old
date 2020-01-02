@@ -79,6 +79,8 @@ public class TextInputView extends FormInputView
         else
             inputBoxText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
+        inputBoxText.setTag(R.id.input_type, "text");
+
         this.editText = inputBoxText;
 
         this.addView(inputBoxTitle);
