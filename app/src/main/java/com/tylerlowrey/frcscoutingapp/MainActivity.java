@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_change_user:
                 NavigationManager.getInstance().navigateToFragment(LoginScreenFragment.newInstance());
                 return true;
+            case R.id.action_settings:
+                NavigationManager.getInstance().navigateToFragment(SettingsFragment.newInstance());
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity
      */
     public static void displayErrorDialog(AppCompatActivity activity, String message)
     {
+
         FragmentManager manager = activity.getSupportFragmentManager();
         ErrorDialogFragment dialog = new ErrorDialogFragment(message);
         dialog.show(manager, "errorDialog");

@@ -115,22 +115,27 @@ public class FormGenerator
         Context context = rootView.getContext();
 
         String type = element.getAttribute("type");
-
+        String fieldName;
         switch(type)
         {
 
             case "text":
+                fieldName = element.getAttribute("name");
                 String textInputTitle = element.getAttribute("title");
                 String textInputHint = element.getAttribute("hint");
 
-                TextInputView textInputElement = new TextInputView(context, textInputTitle, textInputHint,
-                                                            element.getAttribute("inputType"));
+                TextInputView textInputElement = new TextInputView(context,
+                                                                   fieldName,
+                                                                   textInputTitle,
+                                                                   textInputHint,
+                                                                   element.getAttribute("inputType"));
 
 
 
                 rootView.addView(textInputElement);
                 break;
             case "textarea":
+                fieldName = element.getAttribute("name");
                 String textAreaInputTitle = element.getAttribute("title");
                 String textAreaInputHint = element.getAttribute("hint");
 
@@ -142,6 +147,7 @@ public class FormGenerator
                     textAreaNumberOfLines = Integer.parseInt(textAreaNumberOfLinesStr);
 
                 TextAreaInputView textAreaInputElement = new TextAreaInputView(rootView.getContext(),
+                                                                                fieldName,
                                                                                 textAreaInputTitle,
                                                                                 textAreaInputHint,
                                                                                 textAreaNumberOfLines);
@@ -150,9 +156,9 @@ public class FormGenerator
                 break;
 
             case "radio":
+                fieldName = element.getAttribute("name");
                 String radioInputTitle = element.getAttribute("title");
                 String valueType = element.getAttribute("valueType");
-                String defaultRadioButton = element.getAttribute("defaultRadioButton");
                 String radioButtonsOrientationStr = element.getAttribute("orientation");
                 int radioButtonsOrientation;
 
@@ -171,12 +177,11 @@ public class FormGenerator
                 {
                     Element radioButton = (Element) radioButtons.item(nodeIndex);
 
-                    radioButtonsMap.put(radioButton.getAttribute("name"), radioButton.getNodeValue());
+                    radioButtonsMap.put(radioButton.getAttribute("name"), radioButton.getAttribute("value"));
                 }
 
-                RadioInputView radioInputView = new RadioInputView(context, radioInputTitle,
+                RadioInputView radioInputView = new RadioInputView(context, fieldName, radioInputTitle,
                                                                     radioButtonsMap, valueType,
-                                                                    defaultRadioButton,
                                                                     radioButtonsOrientation);
 
                 rootView.addView(radioInputView);
@@ -184,6 +189,7 @@ public class FormGenerator
                 break;
 
             case "checkbox":
+                fieldName = element.getAttribute("name");
                 String checkboxInputTitle = element.getAttribute("title");
                 String checkboxValueType = element.getAttribute("valueType");
 
@@ -200,14 +206,19 @@ public class FormGenerator
                     checkboxesMap.put(radioButton.getAttribute("name"), radioButton.getAttribute("value"));
                 }
 
-                CheckboxInputView checkboxInputView = new CheckboxInputView(context, checkboxInputTitle,
+                CheckboxInputView checkboxInputView = new CheckboxInputView(context, fieldName, checkboxInputTitle,
                                                                             checkboxesMap, checkboxValueType);
 
                 rootView.addView(checkboxInputView);
                 break;
             case "dropdown":
+                fieldName = element.getAttribute("name");
                 String dropdownInputTitle = element.getAttribute("title");
-                String dropdownValueType = element.getAttribute("valueType");
+                String dropdownInputType = element.getAttribute("inputType");
+
+                if(dropdownInputType.equals(""))
+                    dropdownInputType = "text";
+
                 String defaultDropdownItem = element.getAttribute("defaultDropdownItem");
 
                 NodeList dropdownItems = element.getElementsByTagName("ITEM");
@@ -223,8 +234,8 @@ public class FormGenerator
                     dropdownItemsMap.put(dropdownItem.getAttribute("name"), dropdownItem.getAttribute("value"));
                 }
 
-                DropdownInputView dropdownInputView = new DropdownInputView(context, dropdownInputTitle,
-                                                                            dropdownItemsMap, dropdownValueType,
+                DropdownInputView dropdownInputView = new DropdownInputView(context, fieldName, dropdownInputTitle,
+                                                                            dropdownItemsMap, dropdownInputType,
                                                                             defaultDropdownItem);
 
                 rootView.addView(dropdownInputView);

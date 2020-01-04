@@ -12,24 +12,25 @@ import androidx.appcompat.content.res.AppCompatResources;
 import com.tylerlowrey.frcscoutingapp.R;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CheckboxInputView extends FormInputView
 {
     private Context context;
+    private String fieldName;
     private String title;
-    private String inputType;
     private Map<String, String> checkBoxesMap;
     private List<CheckBox> checkBoxes;
+    private String inputType;
 
-    public CheckboxInputView(Context context, String title, Map<String,String> checkBoxesMap,
-                             String inputType)
+    public CheckboxInputView(Context context, String fieldName,
+                             String title, Map<String,String> checkBoxesMap, String inputType)
     {
         super(context);
 
         this.context = context;
+        this.fieldName = fieldName;
         this.title = title;
         this.checkBoxesMap = checkBoxesMap;
         this.inputType = inputType;
@@ -101,27 +102,34 @@ public class CheckboxInputView extends FormInputView
 
     }
 
-    public Map<String, Boolean> getCheckBoxValuesAndTag()
+    public List<String> getCheckedItems()
     {
-        Map<String, Boolean> values = new LinkedHashMap<>();
+        ArrayList<String> checkedValues = new ArrayList<>();
         for(CheckBox checkBox : checkBoxes)
         {
-            values.put((String) checkBox.getTag(), checkBox.isChecked());
+            if(checkBox.isChecked())
+                checkedValues.add((String) checkBox.getTag());
         }
 
-        return values;
+        return checkedValues;
     }
 
     @Override
-    public String getInputName()
+    public String getTitle()
     {
-        throw new UnsupportedOperationException("CheckBox values and names should be retrieved by using the getCheckBoxValuesandTags");
+        return title;
+    }
+
+    @Override
+    public String getFieldName()
+    {
+        return fieldName;
     }
 
     @Override
     public String getInputValue()
     {
-        throw new UnsupportedOperationException("CheckBox values and names should be retrieved by using the getCheckBoxValuesandTags");
+        throw new UnsupportedOperationException("CheckBox values should be retrieved by using the getCheckedItems");
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.tylerlowrey.frcscoutingapp.views;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -15,14 +16,17 @@ import java.util.Map;
 
 public class DropdownInputView extends FormInputView
 {
+    private static final String TAG = "DROPDOWN_INPUT_VIEW";
     private Context context;
+    private String fieldName;
     private String title;
     private String inputType;
     private String defaultDropdownItem;
     private Map<String, String> dropdownItems;
     private Spinner spinner;
 
-    public DropdownInputView(Context context, String title, Map<String,String> dropdownItems,
+    public DropdownInputView(Context context, String fieldName, String title,
+                             Map<String,String> dropdownItems,
                              String inputType, String defaultDropdownItem)
     {
         super(context);
@@ -32,6 +36,7 @@ public class DropdownInputView extends FormInputView
         this.dropdownItems = dropdownItems;
         this.inputType = inputType;
         this.defaultDropdownItem = defaultDropdownItem;
+        this.fieldName = fieldName;
 
         init();
     }
@@ -67,6 +72,9 @@ public class DropdownInputView extends FormInputView
         //-- Create Dropdown (Spinner) --
         List<String> dropdownNames = new ArrayList<>();
 
+        if(defaultDropdownItem.equals(""))
+            dropdownNames.add("");
+
         for(Map.Entry<String,String> dropdownKeyVal: dropdownItems.entrySet())
         {
             dropdownNames.add(dropdownKeyVal.getKey());
@@ -79,6 +87,8 @@ public class DropdownInputView extends FormInputView
 
         this.spinner = new Spinner(context);
         spinner.setAdapter(adapter);
+
+        Log.d(TAG, "Default Dropdown Item: " + defaultDropdownItem);
 
         if(!defaultDropdownItem.equals(""))
             spinner.setSelection(adapter.getPosition(defaultDropdownItem));
@@ -103,9 +113,15 @@ public class DropdownInputView extends FormInputView
     }
 
     @Override
-    public String getInputName()
+    public String getTitle()
     {
-        return spinner.getSelectedItem().toString();
+        return title;
+    }
+
+    @Override
+    public String getFieldName()
+    {
+        return fieldName;
     }
 
     @Override

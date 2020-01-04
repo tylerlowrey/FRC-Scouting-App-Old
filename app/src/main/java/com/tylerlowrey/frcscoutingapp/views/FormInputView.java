@@ -23,9 +23,11 @@ public abstract class FormInputView extends LinearLayout
         );
     }
 
+    public abstract String getTitle();
+
     public abstract String getInputType();
 
     public abstract String getInputValue();
 
-    public abstract String getInputName();
+    public abstract String getFieldName();
 }

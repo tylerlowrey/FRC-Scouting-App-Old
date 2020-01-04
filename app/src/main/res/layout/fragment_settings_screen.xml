@@ -18,8 +18,8 @@
         >
 
         <Button
-            android:id="@+id/google_sign_out_button"
-            android:text="Logout of Google Drive"
+            android:id="@+id/log_scouting_data_button"
+            android:text="Log Scouting Data"
             android:textAllCaps="false"
             android:textSize="30sp"
             android:background="@drawable/form_submit_button"

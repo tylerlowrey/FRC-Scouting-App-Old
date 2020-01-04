@@ -2,6 +2,7 @@ package com.tylerlowrey.frcscoutingapp.views;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -17,13 +18,15 @@ import java.util.Map;
 
 public class RadioInputView extends FormInputView
 {
+    private static final String TAG = "RADIO_INPUT_VIEW";
     private Context context;
+    private String fieldName;
     private String title;
     private Map<String, String> radioButtonsMap;
     private String defaultRadioButton;
     private String inputType;
     private int radioButtonsOrientation;
-    private List<RadioButton> radioButtons;
+    private RadioGroup radioGroup;
 
     /**
      * Creates a Form input box that contains radio buttons that can be selected
@@ -35,24 +38,20 @@ public class RadioInputView extends FormInputView
      *                     that the name represents.
      * @param inputType The String representing what the type the radioButtons value represents.
      *                    valid options are: integer, float, text
-     * @param defaultRadioButton The name attribute of the radio button that will be selected by
-     *                           default. If you do not want any of the radio buttons selected,
-     *                           input null
      * @param orientation The orientation of the radio buttons. Valid input is RadioGroup.VERTICAL
      *                    or RadioGroup.HORIZONTAL
      */
-    public RadioInputView(Context context, String title, Map<String, String> radioButtonsMap,
-                          String inputType, String defaultRadioButton, int orientation)
+    public RadioInputView(Context context, String fieldName, String title, Map<String, String> radioButtonsMap,
+                          String inputType, int orientation)
     {
         super(context);
 
         this.context = context;
+        this.fieldName = fieldName;
         this.title = title;
         this.inputType = inputType;
         this.radioButtonsMap = radioButtonsMap;
-        this.defaultRadioButton = defaultRadioButton;
         this.radioButtonsOrientation = orientation;
-        this.radioButtons = new ArrayList<>();
 
         init();
     }
@@ -115,41 +114,40 @@ public class RadioInputView extends FormInputView
             radioButton.setTag(radioButtonKeyVal.getValue());
             radioButton.setTextSize(24);
 
-            if(radioButtonKeyVal.getKey().equals(defaultRadioButton))
-                radioButton.setSelected(true);
 
             radioGroup.addView(radioButton);
 
-            radioButtons.add(radioButton);
-
         }
+
+        this.radioGroup = radioGroup;
 
         this.addView(inputBoxTitle);
         this.addView(radioGroup);
     }
 
     @Override
-    public String getInputName()
+    public String getTitle()
     {
-        for(RadioButton radioButton : radioButtons)
-        {
-            if(radioButton.isSelected())
-                return (String) radioButton.getTag();
-        }
+        return title;
+    }
 
-        return null;
+    @Override
+    public String getFieldName()
+    {
+        return fieldName;
     }
 
     @Override
     public String getInputValue()
     {
-        for(RadioButton radioButton : radioButtons)
-        {
-            if(radioButton.isSelected())
-                return radioButton.getText().toString();
-        }
 
-        return null;
+        RadioButton selectedRadioButton = findViewById(radioGroup.getCheckedRadioButtonId());
+
+        if (selectedRadioButton == null)
+            return null;
+
+        return radioButtonsMap.get(selectedRadioButton.getText().toString());
+
     }
 
     @Override

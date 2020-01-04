@@ -15,16 +15,18 @@ import com.tylerlowrey.frcscoutingapp.R;
 public class TextAreaInputView extends FormInputView
 {
     private Context context;
+    private String fieldName;
     private String title;
     private String hint;
     private int numLinesToShow;
     private EditText editText;
 
-    public TextAreaInputView(Context context, String title, String hint, int numLinesToShow)
+    public TextAreaInputView(Context context, String fieldName, String title, String hint, int numLinesToShow)
     {
         super(context);
 
         this.context = context;
+        this.fieldName = fieldName;
         this.title = title;
         this.hint = hint;
         this.numLinesToShow = numLinesToShow;
@@ -94,9 +96,15 @@ public class TextAreaInputView extends FormInputView
     }
 
     @Override
-    public String getInputName()
+    public String getTitle()
     {
-        return (String) editText.getTag();
+        return title;
+    }
+
+    @Override
+    public String getFieldName()
+    {
+        return fieldName;
     }
 
     @Override

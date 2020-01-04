@@ -12,16 +12,18 @@ import com.tylerlowrey.frcscoutingapp.R;
 public class TextInputView extends FormInputView
 {
     private Context context;
+    private String fieldName;
     private String title;
     private String hint;
     private String inputType;
     private EditText editText;
 
-    public TextInputView(Context context, String title, String hint, String inputType)
+    public TextInputView(Context context, String fieldName, String title, String hint, String inputType)
     {
         super(context);
 
         this.context = context;
+        this.fieldName = fieldName;
         this.title = title;
         this.hint = hint;
         this.inputType = inputType;
@@ -74,8 +76,10 @@ public class TextInputView extends FormInputView
                                 textInputPadding,
                                 textInputPadding,
                                 textInputPadding);
-        if(inputType.equals("number"))
+        if(inputType.equals("integer"))
             inputBoxText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        else if(inputType.equals("float"))
+            inputBoxText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         else
             inputBoxText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
@@ -89,9 +93,15 @@ public class TextInputView extends FormInputView
     }
 
     @Override
-    public String getInputName()
+    public String getTitle()
     {
-        return (String) editText.getTag();
+        return title;
+    }
+
+    @Override
+    public String getFieldName()
+    {
+        return fieldName;
     }
 
     @Override

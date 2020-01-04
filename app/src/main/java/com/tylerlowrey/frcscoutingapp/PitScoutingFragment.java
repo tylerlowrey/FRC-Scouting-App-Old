@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,20 +28,23 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.tylerlowrey.frcscoutingapp.views.CheckboxInputView;
-import com.tylerlowrey.frcscoutingapp.views.DropdownInputView;
 import com.tylerlowrey.frcscoutingapp.views.FormInputView;
-import com.tylerlowrey.frcscoutingapp.views.RadioInputView;
-import com.tylerlowrey.frcscoutingapp.views.TextAreaInputView;
-import com.tylerlowrey.frcscoutingapp.views.TextInputView;
 
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -230,15 +232,21 @@ public class PitScoutingFragment extends Fragment
         if(pictureName == null)
             pictureName = "";
 
+        JsonObject formData = new JsonObject();
 
         for(int i = 0; i < formContainer.getChildCount(); ++i)
         {
             if(formContainer.getChildAt(i) instanceof FormInputView)
             {
                 LinearLayout formElement = (LinearLayout) formContainer.getChildAt(i);
-                getDataFromFormElement(formElement);
+                addFormElementDataToJsonObject(formElement, formData);
             }
         }
+
+        ScoutingDatabase.getInstance(getContext()).saveScoutingData(username, timeFromEpoch,
+                                                                    pictureName, formData.toString());
+
+        MainActivity.makeToast(getContext(), "Form Saved", Toast.LENGTH_LONG);
 
     };
 
@@ -263,33 +271,155 @@ public class PitScoutingFragment extends Fragment
         return "";
     }
 
-    private void getDataFromFormElement(View view)
+    private void addFormElementDataToJsonObject(View view, JsonObject jsonObject) throws NumberFormatException
     {
         FormInputView formInputView = (FormInputView) view;
 
         View element = formInputView.getChildAt(1);
 
-        String inputType = (String) element.getTag(R.id.input_type);
+        String elementType = (String) element.getTag(R.id.input_type);
+        String fieldName = formInputView.getFieldName();
+        String title = formInputView.getTitle();
+        String inputType = formInputView.getInputType();
 
-        switch(inputType)
+        try
         {
-            case "text":
-                TextInputView textInputView = (TextInputView) formInputView;
-                break;
-            case "textarea":
-                TextAreaInputView textAreaInputView = (TextAreaInputView) formInputView;
-                break;
-            case "radio":
-                RadioInputView radioInputView = (RadioInputView) formInputView;
-                break;
-            case "checkbox":
-                CheckboxInputView checkboxInputView = (CheckboxInputView) formInputView;
-                break;
-            case "dropdown":
-                DropdownInputView dropdownInputView = (DropdownInputView) formInputView;
-                break;
+            switch (elementType)
+            {
+                case "text":
+                {
+
+                    String inputValue = formInputView.getInputValue();
+
+                    if(inputValue.equals(""))
+                    {
+                        jsonObject.addProperty(fieldName, (String) null);
+                        break;
+                    }
+
+                    if (inputType.equals("integer"))
+                    {
+                        int intValue = Integer.parseInt(inputValue);
+                        jsonObject.addProperty(fieldName, intValue);
+                    }
+                    else if (inputType.equals("float"))
+                    {
+                        float floatValue = Float.parseFloat(inputValue);
+                        jsonObject.addProperty(fieldName, floatValue);
+                    }
+                    else
+                    {
+                        jsonObject.addProperty(fieldName, formInputView.getInputValue());
+                    }
+
+                    break;
+                }
+                case "textarea":
+                    jsonObject.addProperty(fieldName, formInputView.getInputValue());
+                    break;
+                case "radio":
+                {
+
+                    String inputValue = formInputView.getInputValue();
+
+                    if(inputValue == null)
+                    {
+                        jsonObject.addProperty(fieldName, (String) null);
+                        break;
+                    }
+
+                    if (inputType.equals("integer"))
+                    {
+                        int intValue = Integer.parseInt(inputValue);
+                        jsonObject.addProperty(fieldName, intValue);
+                    }
+                    else if (inputType.equals("float"))
+                    {
+                        float floatValue = Float.parseFloat(inputValue);
+                        jsonObject.addProperty(fieldName, floatValue);
+                    }
+                    else
+                    {
+                        jsonObject.addProperty(fieldName, formInputView.getInputValue());
+                    }
+
+                    break;
+                }
+                case "checkbox":
+                    CheckboxInputView checkboxInputView = (CheckboxInputView) formInputView;
+
+                    Gson gson = new GsonBuilder().create();
+
+                    List<String> checkedValues = checkboxInputView.getCheckedItems();
+                    JsonArray jsonArray;
+
+                    if (inputType.equals("integer"))
+                    {
+                        List<Integer> intCheckedValues = new ArrayList<>();
+
+                        for (String checkedValue : checkedValues)
+                            Integer.parseInt(checkedValue);
+
+                        JsonElement jsonElement = gson.toJsonTree(intCheckedValues);
+
+                        jsonArray = jsonElement.getAsJsonArray();
+                    }
+                    else if (inputType.equals("float"))
+                    {
+                        List<Float> intCheckedValues = new ArrayList<>();
+
+                        for (String checkedValue : checkedValues)
+                            Float.parseFloat(checkedValue);
+
+                        JsonElement jsonElement = gson.toJsonTree(intCheckedValues);
+
+                        jsonArray = jsonElement.getAsJsonArray();
+                    }
+                    else
+                    {
+                        JsonElement jsonElement = gson.toJsonTree(checkedValues);
+                        jsonArray = jsonElement.getAsJsonArray();
+                    }
+
+
+                    jsonObject.add(fieldName, jsonArray);
+                    break;
+                case "dropdown":
+                {
+
+                    String inputValue = formInputView.getInputValue();
+
+                    if(inputValue == null)
+                    {
+                        jsonObject.addProperty(fieldName, (String) null);
+                        break;
+                    }
+
+                    if (inputType.equals("integer"))
+                    {
+                        int intValue = Integer.parseInt(inputValue);
+                        jsonObject.addProperty(fieldName, intValue);
+                    }
+                    else if (inputType.equals("float"))
+                    {
+                        float floatValue = Float.parseFloat(inputValue);
+                        jsonObject.addProperty(fieldName, floatValue);
+                    }
+                    else
+                    {
+                        jsonObject.addProperty(fieldName, formInputView.getInputValue());
+                    }
+
+                    break;
+                }
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            MainActivity.displayErrorDialog((AppCompatActivity) getActivity(), "Invalid input given for field: " + title);
         }
     }
+
 
 
 
