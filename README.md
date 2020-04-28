@@ -3,7 +3,7 @@ An Android application intended for use by FRC Teams in order to scout during co
 
 ## Modifying the App
 
-The app currently provides example forms for both Match and Pit scouting. In order to edit these forms you need to modify the match_scouting_form.xml and pit_scouting_form.xml respectively. These files are located in the `app/src/main/res/raw` folder
+The app currently provides example forms for both Match and Pit scouting. In order to edit these forms you need to modify the `match_scouting_form.xml` and `pit_scouting_form.xml` files respectively. These files are located in the `app/src/main/res/raw` folder
 
 Both forms have examples for every supported form type (Text fields, Text Area fields, Selection/Radio Buttons, Checkboxes, and Dropdowns) . Once you have made your changes you can deploy them to your device (using Android Studio) by following these instructions from Google: https://developer.android.com/studio/run/device
 
